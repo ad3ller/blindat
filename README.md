@@ -37,7 +37,7 @@ df[name] = df[name] + offset * np.random.rand()
 
 This library is an experiment in developing a reasonable workflow for blind analysis.  It is not intended to be a universal solution for all forms of data or blind analysis techniques. 
 
-I assume the user *wants* to avoid bias. Trust allows for a simple and reversible approach (stored data is never affected).  However, a more paranoia is probably more appropriate for critical applications.
+I assume the user *wants* to avoid bias. Trust allows for a simple and reversible approach (stored data is never affected).  However, more paranoia is probably more appropriate for critical applications.
 
 # Install
 
