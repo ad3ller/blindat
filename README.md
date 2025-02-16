@@ -1,4 +1,4 @@
-# blindpandas
+# blindat
 
 A Python library for blind analysis of measurement data in a `pandas.DataFrame()`.
 
@@ -31,7 +31,7 @@ df = pd.read_csv(fil)
 df[name] = df[name] + offset * np.random.rand()
 ```
 
-`blindpandas` slightly extends this simple concept using transformation rules.
+`blindat` slightly extends this simple concept using transformation rules.
 
 ### things to consider
 
@@ -130,10 +130,10 @@ The simplest way to specify rules is with a column name (or a list of names) and
 
 
 ```python
-import blindpandas as bp
+import blindat as bd
 
 # list of columns with global offset and scale ranges
-rules = bp.generate_rules("A", offset=(10.0, 20.0), random_seed=42)
+rules = bd.generate_rules("A", offset=(10.0, 20.0), random_seed=42)
 ```
 
 In this example, we want to offset the values in column 'A' by a random value selected from the range of 10 to 20.  Rules with bespoke ranges for each column can be generated using a dictionary or a list of tuples for the specification argument.
@@ -144,7 +144,7 @@ You shouldn't be looking at the rule parameters.  But maybe you have a legit rea
 
 
 ```python
-bp.inspect(rules)
+bd.inspect(rules)
 ```
 
     {'A': {'offset': np.float64(13.745401188473625), 'scale': np.float64(1.0)}}
@@ -157,7 +157,7 @@ It's not necessary to save the rules because they can be created reproducibly by
 
 ```python
 # blind data
-df1 = bp.blind(df, rules)
+df1 = bd.blind(df, rules)
 df1.head()
 ```
 
@@ -220,7 +220,7 @@ If an experiment generates many different data files, it might be convenient to 
 
 
 ```python
-from blindpandas import obfuscate
+from blindat import obfuscate
 
 class MeasurementData:
     def __init__(self, path=None):
@@ -366,7 +366,7 @@ DEFAULT_SPECIFICATION = {
 
 
 def default_rules(random_seed=None):
-    return bp.generate_rules(DEFAULT_SPECIFICATION, random_seed=random_seed)
+    return bd.generate_rules(DEFAULT_SPECIFICATION, random_seed=random_seed)
 
 
 # in your analysis notebook
@@ -428,7 +428,7 @@ Alternatively, one could hard-code rules into a data-access class.  However, for
 
 ```python
 import warnings
-from blindpandas import blind
+from blindat import blind
 
 
 class BlindData(MeasurementData):

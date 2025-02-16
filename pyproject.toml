@@ -1,7 +1,7 @@
 [project]
-name = "blindpandas"
-version = "0.1.0"
-description = "blind experimental data"
+name = "blindat"
+version = "0.1.1"
+description = "blind pandas dataframes"
 readme = "README.md"
 authors = [
     { name = "ad3ller", email = "13367711+ad3ller@users.noreply.github.com" }

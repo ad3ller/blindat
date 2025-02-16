@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-import blindpandas as bp
+import blindat as bd
 
 COLUMNS = ["A", "B"]
 NUM_ROWS = int(1e2)
@@ -16,10 +16,10 @@ df = pd.DataFrame(data, columns=COLUMNS)
 
 def test_transform():
     # generate rules
-    rules = bp.generate_rules(SPECS)
+    rules = bd.generate_rules(SPECS)
 
     # blind
-    left = bp.blind(df, rules)
+    left = bd.blind(df, rules)
 
     # test
     right = pd.DataFrame(data, columns=COLUMNS)
