@@ -8,8 +8,8 @@ import pandas.core.common as com
 def add_rule(
     rules: typing.Dict,
     name: str,
-    offset: int | float = 0.0,
-    scale: int | float = 1.0,
+    offset: float | tuple[float, float] = 0.0,
+    scale: float | tuple[float, float] = 1.0,
     verbose: bool = False,
 ) -> typing.Dict:
     """Add a new rule to a dictionary of rules.
@@ -58,8 +58,8 @@ def add_rule(
 
 def generate_rules(
     specification: typing.Any,
-    offset: int | float = 0.0,
-    scale: int | float = 1.0,
+    offset: float | tuple[float, float] = 0.0,
+    scale: float | tuple[float, float] = 1.0,
     random_seed: int | None = None,
     verbose: bool = False,
 ) -> typing.Dict:
