@@ -160,7 +160,9 @@ def inspect(rules: typing.Dict) -> typing.Dict:
 
 
 def obfuscate(
-    func: typing.Callable | None = None, default_rules: typing.Dict | None = None
+    func: typing.Callable | None = None,
+    default_rules: typing.Dict | None = None,
+    rules_keyword: str = "rules",
 ) -> typing.Callable:
     """Decorator to blind the results of functions or methods
     that return a pandas.DataFrame as the first or only result.
@@ -169,6 +171,7 @@ def obfuscate(
     ----------
     func :: Function
     default_rules :: dict (default=None)
+    rules_keyword :: str (default="rules")
 
     Example
     =======
@@ -183,11 +186,13 @@ def obfuscate(
         return blind(pandas.DataFrame(data), rules=rules)
     """
     if func is None:
-        return functools.partial(obfuscate, default_rules=default_rules)
+        return functools.partial(
+            obfuscate, default_rules=default_rules, rules_keyword=rules_keyword
+        )
 
     @functools.wraps(func)
     def wrapper(*args: typing.Any, **kwargs: typing.Any) -> typing.Any:
-        rules = kwargs.pop("rules", default_rules)
+        rules = kwargs.pop(rules_keyword, default_rules)
         result = func(*args, **kwargs)
         # no transform
         if rules is None:
