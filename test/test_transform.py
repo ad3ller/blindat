@@ -3,7 +3,7 @@ import pandas as pd
 import blindat as bd
 
 COLUMNS = ["A", "B"]
-NUM_ROWS = int(1e2)
+NUM_ROWS = int(1e6)
 SPECS = {
     "A": {"offset": 0.0, "scale": 2.0},
     "B": {"offset": 0.5, "scale": 1.0},

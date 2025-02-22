@@ -1,10 +1,17 @@
 import functools
+import typing
 import numpy as np
 import pandas as pd
 import pandas.core.common as com
 
 
-def add_rule(rules, name, offset=0.0, scale=1.0, verbose=False):
+def add_rule(
+    rules: typing.Dict,
+    name: str,
+    offset: int | float = 0.0,
+    scale: int | float = 1.0,
+    verbose: bool = False,
+) -> typing.Dict:
     """Add a new rule to a dictionary of rules.
 
     If offset or scale are given as `(start, stop)`,
@@ -50,8 +57,12 @@ def add_rule(rules, name, offset=0.0, scale=1.0, verbose=False):
 
 
 def generate_rules(
-    specification, offset=0.0, scale=1.0, random_seed=None, verbose=False
-):
+    specification: typing.Any,
+    offset: int | float = 0.0,
+    scale: int | float = 1.0,
+    random_seed: int | None = None,
+    verbose: bool = False,
+) -> typing.Dict:
     """Generate a dictionary of linear transform rules.
 
     If offset or scale are given as two-valued tuples,
@@ -81,7 +92,7 @@ def generate_rules(
         "B": {"offset": 0.5, "scale": 1.2},
     }
     """
-    rules = {}
+    rules: typing.Dict = dict()
     np.random.seed(random_seed)
     match specification:
         case str(name):
@@ -110,7 +121,7 @@ def generate_rules(
     return rules
 
 
-def blind(df, rules):
+def blind(df: pd.DataFrame, rules: typing.Dict) -> pd.DataFrame:
     """Simular functionality to pd.DataFrame.transform(rules),
     except columns without rules are not dropped.
 
@@ -130,7 +141,7 @@ def blind(df, rules):
     return df
 
 
-def inspect(rules):
+def inspect(rules: typing.Dict) -> typing.Dict:
     """Extract offset and scale values from a dictionary
     of linear functions.
 
@@ -148,9 +159,16 @@ def inspect(rules):
     }
 
 
-def obfuscate(func):
+def obfuscate(
+    func: typing.Callable | None = None, default_rules: typing.Dict | None = None
+) -> typing.Callable:
     """Decorator to blind the results of functions or methods
     that return a pandas.DataFrame as the first or only result.
+
+    Parameters
+    ----------
+    func :: Function
+    default_rules :: dict (default=None)
 
     Example
     =======
@@ -164,24 +182,26 @@ def obfuscate(func):
         rules = kwargs.pop("transform", None)
         return blind(pandas.DataFrame(data), rules=rules)
     """
+    if func is None:
+        return functools.partial(obfuscate, default_rules=default_rules)
 
     @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        rules = kwargs.pop("transform", None)
+    def wrapper(*args: typing.Any, **kwargs: typing.Any) -> typing.Any:
+        rules = kwargs.pop("rules", default_rules)
         result = func(*args, **kwargs)
-        # apply transform
-        if rules is not None:
-            assert isinstance(rules, dict), "invalid rules"
-            match result:
-                case pd.DataFrame():
-                    # DataFrame
-                    return blind(result, rules)
-                case pd.DataFrame(), *rest:
-                    # first element is DataFrame
-                    return blind(result[0], rules), *rest
-                case _:
-                    TypeError("func result does not match a valid case")
         # no transform
-        return result
+        if rules is None:
+            return result
+        # blind data
+        assert isinstance(rules, dict), "invalid rules"
+        match result:
+            case pd.DataFrame():
+                # DataFrame
+                return blind(result, rules)
+            case pd.DataFrame(), *rest:
+                # first element is DataFrame
+                return blind(result[0], rules), *rest
+            case _:
+                TypeError("func result does not match a valid case")
 
     return wrapper

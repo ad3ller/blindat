@@ -110,4 +110,4 @@ df1.head()
 </table>
 </div>
 
-See docs for more sophisticated examples.
+The `@obfuscate` decorator can be used to wrap methods that load a `pandas.Dataframe` with the `blind()` function. See docs for examples.
