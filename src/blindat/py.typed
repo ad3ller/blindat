@@ -1,0 +1,27 @@
+import typing
+
+
+def add_rule(
+    rules: typing.Dict,
+    name: str,
+    offset: int | float = 0.0,
+    scale: int | float = 1.0,
+    verbose: bool = False,
+) -> typing.Dict: ...
+
+
+def generate_rules(
+    specification: typing.Any,
+    offset: int | float = 0.0,
+    scale: int | float = 1.0,
+    random_seed: int | None = None,
+    verbose: bool = False,
+) -> typing.Dict: ...
+
+
+def blind(df: pd.DataFrame, rules: typing.Dict) -> pd.DataFrame: ...
+
+
+def obfuscate(
+    func: typing.Callable | None = None, default_rules: typing.Dict | None = None
+) -> typing.Callable: ...

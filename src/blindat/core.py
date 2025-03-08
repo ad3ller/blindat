@@ -159,7 +159,7 @@ def inspect(rules: typing.Dict) -> typing.Dict:
     }
 
 
-def obfuscate(
+def blindat(
     func: typing.Callable | None = None,
     default_rules: typing.Dict | None = None,
     rules_keyword: str = "rules",
@@ -176,18 +176,18 @@ def obfuscate(
     Example
     =======
 
-    @obfuscate
-    def load(transform=None):
+    @blindat
+    def load(rules=None):
         return pandas.DataFrame(data)
 
     # ... which is equivalent to
     def load(**kwargs):
-        rules = kwargs.pop("transform", None)
-        return blind(pandas.DataFrame(data), rules=rules)
+        rules = kwargs.pop("rules", None)
+        return blind(pandas.DataFrame(data), rules)
     """
     if func is None:
         return functools.partial(
-            obfuscate, default_rules=default_rules, rules_keyword=rules_keyword
+            blindat, default_rules=default_rules, rules_keyword=rules_keyword
         )
 
     @functools.wraps(func)
