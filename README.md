@@ -1,6 +1,6 @@
 # blindat
 
-A Python library for blind analysis of measurement data in a `pandas.DataFrame()`.
+A Python library for blind analysis of measurement data.
 
 *Do you need to blind your data?*
 
@@ -8,7 +8,7 @@ Maybe not. But if you expect (or want?!) a measurement to produce a certain resu
 
 *Do you need a package to blind your data?*
 
-Nope. To randomly offset the values of a column:
+Nope. To randomly offset the values of a column of a `pandas.DataFrame()`,
 
 ```python
 import numpy as np
