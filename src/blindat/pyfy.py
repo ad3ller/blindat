@@ -1,3 +1,5 @@
+"""protect yourself from yourself"""
+
 import functools
 import typing
 import numpy as np
@@ -139,6 +141,49 @@ def blind(df: pd.DataFrame, rules: typing.Dict) -> pd.DataFrame:
         # df[k] = df[k].transform(v)             # slow AF
         df[k] = com.apply_if_callable(v, df[k])  # why so fast?!
     return df
+
+
+def norm_rules(df: pd.DataFrame, columns: str | typing.List) -> typing.Dict:
+    """Generate transform rules to normalize data for a mean
+    value of zero and a standard deviation of one.
+
+    Parameters
+    ==========
+    df :: pandas.DataFrame
+    rules :: dict(name=Function)
+
+    Returns
+    =======
+    rule :: dict(name=Function)
+    """
+    if isinstance(columns, str):
+        columns = [columns]
+    specification = []
+    for name in columns:
+        data = df[name]
+        scale = 1.0 / data.std()
+        offset = -(np.multiply(data, scale)).mean()
+        specification.append((name, offset, scale))
+    rules = generate_rules(specification=specification)
+    return rules
+
+
+def normalize(df: pd.DataFrame, columns: str | typing.List) -> pd.DataFrame:
+    """
+    Transform data for a mean value of zero and a standard 
+    deviation of one.
+    
+    Parameters
+    ==========
+    df :: pandas.DataFrame
+    columns :: list(str)
+
+    Returns
+    =======
+    :: pandas.DataFrame
+    """ ""
+    rules = norm_rules(df, columns)
+    return blind(df, rules)
 
 
 def inspect(rules: typing.Dict) -> typing.Dict:

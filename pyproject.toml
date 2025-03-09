@@ -1,6 +1,6 @@
 [project]
 name = "blindat"
-version = "0.1.4"
+version = "0.1.5"
 description = "blind pandas dataframes"
 readme = "README.md"
 authors = [

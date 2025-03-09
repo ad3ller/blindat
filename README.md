@@ -8,7 +8,7 @@ Maybe not. But if you expect (or want?!) a measurement to produce a certain resu
 
 *Do you need a package to blind your data?*
 
-Nope. To randomly offset the values of a column of a `pandas.DataFrame()`,
+Nope. To randomly offset the values in a column of a `pandas.DataFrame()`,
 
 ```python
 import numpy as np
@@ -26,13 +26,13 @@ df = pd.read_csv(fil)
 df[name] = df[name] + offset * np.random.rand()
 ```
 
-`blindat` slightly extends this simple concept using transformation rules.
+`blindat` extends this simple concept using transformation rules.
 
 ### things to consider
 
 This library is an experiment in developing a reasonable workflow for blind analysis.  It is not intended to be a universal solution for all forms of data or blind analysis techniques. 
 
-I assume the user *wants* to avoid bias. Trust allows for a simple and reversible approach (stored data is never altered).  More paranoia is more appropriate for critical applications.
+I assume the user *wants* to avoid bias. Trust allows for a simple and reversible approach (stored data is never altered).  More paranoia is more appropriate for more critical applications.
 
 # Install
 
@@ -46,7 +46,7 @@ pip install .
 
 # Usage
 
-Blind analysis can be as simple as applying an unknown transform to an appropriate column of data (e.g., microwave frequency).  
+Blind analysis can be as simple as applying an unknown transform to an appropriate column of data (e.g., laser wavelength or microwave frequency).
 
 In this example, a random offset is selected from the range of 10 to 20 and added to column `A` of the pandas DataFrame, `df`.
 
@@ -110,4 +110,8 @@ df1.head()
 </table>
 </div>
 
-The `@blindat` decorator can be used to wrap methods that load a `pandas.Dataframe` with the `blind()` function. See docs for examples.
+The `@blindat` decorator can be used to wrap methods that load a `pandas.Dataframe` with the `blind()` function. 
+
+The `normalize()` function blinds data by offsetting and scaling values to force a mean value of zero and a standard deviation of one.
+
+See docs for examples.

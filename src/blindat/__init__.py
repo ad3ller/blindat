@@ -1,1 +1,1 @@
-from .core import generate_rules, blind, inspect, blindat
+from .pyfy import generate_rules, blind, norm_rules, normalize, inspect, blindat
