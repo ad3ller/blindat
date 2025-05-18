@@ -31,9 +31,6 @@ def add_rule(
     =======
     :: dict(name=Function)
     """
-    # testing parameters - NOT CURRENTLY USED!
-    assign = False  ## format functions for pd.DataFrame.assign instead of pd.DataFrame.transform.
-    preffix = "blind_"  ## preffix column names
     # __main__
     if verbose:
         print(f"Data transformation parameters for column = {name}:")
@@ -49,12 +46,7 @@ def add_rule(
         scale = _start + np.random.rand() * (_stop - _start)
     if verbose:
         print(f"    {name}.scale = {scale}")
-    if assign:
-        # pd.DataFrame.assign(**rules)
-        rules[preffix + name] = lambda x: np.add(np.multiply(x[name], scale), offset)
-    else:
-        # pd.DataFrame.apply(rules) or pd.DataFrame.transform(rules)
-        rules[name] = lambda x: np.add(np.multiply(x, scale), offset)
+    rules[name] = lambda x: np.add(np.multiply(x, scale), offset)
     return rules
 
 
@@ -143,21 +135,19 @@ def blind(df: pd.DataFrame, rules: typing.Dict) -> pd.DataFrame:
     return df
 
 
-def norm_rules(df: pd.DataFrame, columns: str | typing.List) -> typing.Dict:
+def norm_rules(df: pd.DataFrame, *columns: str) -> typing.Dict:
     """Generate transform rules to normalize data for a mean
     value of zero and a standard deviation of one.
 
     Parameters
     ==========
     df :: pandas.DataFrame
-    rules :: dict(name=Function)
+    column(s) :: str
 
     Returns
     =======
     rule :: dict(name=Function)
     """
-    if isinstance(columns, str):
-        columns = [columns]
     specification = []
     for name in columns:
         data = df[name]
@@ -168,7 +158,7 @@ def norm_rules(df: pd.DataFrame, columns: str | typing.List) -> typing.Dict:
     return rules
 
 
-def normalize(df: pd.DataFrame, columns: str | typing.List) -> pd.DataFrame:
+def normalize(df: pd.DataFrame, *columns: str) -> pd.DataFrame:
     """
     Transform data for a mean value of zero and a standard 
     deviation of one.
@@ -176,13 +166,13 @@ def normalize(df: pd.DataFrame, columns: str | typing.List) -> pd.DataFrame:
     Parameters
     ==========
     df :: pandas.DataFrame
-    columns :: list(str)
+    column(s) :: str
 
     Returns
     =======
     :: pandas.DataFrame
     """ ""
-    rules = norm_rules(df, columns)
+    rules = norm_rules(df, *columns)
     return blind(df, rules)
 
 
